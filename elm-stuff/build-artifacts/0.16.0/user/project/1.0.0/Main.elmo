@@ -1,0 +1,56 @@
+Elm.Main = Elm.Main || {};
+Elm.Main.make = function (_elm) {
+   "use strict";
+   _elm.Main = _elm.Main || {};
+   if (_elm.Main.values) return _elm.Main.values;
+   var _U = Elm.Native.Utils.make(_elm),
+   $Basics = Elm.Basics.make(_elm),
+   $Debug = Elm.Debug.make(_elm),
+   $Html = Elm.Html.make(_elm),
+   $Html$Events = Elm.Html.Events.make(_elm),
+   $Lambda = Elm.Lambda.make(_elm),
+   $List = Elm.List.make(_elm),
+   $Maybe = Elm.Maybe.make(_elm),
+   $Result = Elm.Result.make(_elm),
+   $Signal = Elm.Signal.make(_elm),
+   $StartApp$Simple = Elm.StartApp.Simple.make(_elm);
+   var _op = {};
+   var update = F2(function (action,model) {
+      var _p0 = action;
+      switch (_p0.ctor)
+      {case "Variable": var _p1 = model;
+           if (_p1.ctor === "Empty") {
+                 return $Lambda.Variable("s");
+              } else {
+                 return model;
+              }
+         case "Abstract": var _p2 = model;
+           if (_p2.ctor === "Variable") {
+                 return A2($Lambda.Abstraction,"s",model);
+              } else {
+                 return model;
+              }
+         default: var _p3 = model;
+           if (_p3.ctor === "Abstraction") {
+                 return A2($Lambda.Application,model,$Lambda.Empty);
+              } else {
+                 return model;
+              }}
+   });
+   var Apply = {ctor: "Apply"};
+   var Abstract = {ctor: "Abstract"};
+   var Variable = {ctor: "Variable"};
+   var view = F2(function (address,model) {
+      return A2($Html.div,
+      _U.list([]),
+      _U.list([A2($Html.h1,_U.list([]),_U.list([$Html.text("Lambda Game")]))
+              ,A2($Html.h2,_U.list([]),_U.list([$Html.text("Expression")]))
+              ,$Html.text($Lambda.view(model))
+              ,A2($Html.h2,_U.list([]),_U.list([$Html.text("Actions")]))
+              ,A2($Html.button,_U.list([A2($Html$Events.onClick,address,Variable)]),_U.list([$Html.text("Variable")]))
+              ,A2($Html.button,_U.list([A2($Html$Events.onClick,address,Abstract)]),_U.list([$Html.text("Abstract")]))
+              ,A2($Html.button,_U.list([A2($Html$Events.onClick,address,Apply)]),_U.list([$Html.text("Apply")]))]));
+   });
+   var main = $StartApp$Simple.start({model: $Lambda.Empty,view: view,update: update});
+   return _elm.Main.values = {_op: _op,main: main,Variable: Variable,Abstract: Abstract,Apply: Apply,update: update,view: view};
+};

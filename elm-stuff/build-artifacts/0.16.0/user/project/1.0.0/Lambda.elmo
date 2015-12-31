@@ -1,0 +1,27 @@
+Elm.Lambda = Elm.Lambda || {};
+Elm.Lambda.make = function (_elm) {
+   "use strict";
+   _elm.Lambda = _elm.Lambda || {};
+   if (_elm.Lambda.values) return _elm.Lambda.values;
+   var _U = Elm.Native.Utils.make(_elm),
+   $Basics = Elm.Basics.make(_elm),
+   $Debug = Elm.Debug.make(_elm),
+   $List = Elm.List.make(_elm),
+   $Maybe = Elm.Maybe.make(_elm),
+   $Result = Elm.Result.make(_elm),
+   $Signal = Elm.Signal.make(_elm);
+   var _op = {};
+   var view = function (e) {
+      var _p0 = e;
+      switch (_p0.ctor)
+      {case "Empty": return "(empty)";
+         case "Variable": return _p0._0;
+         case "Abstraction": return A2($Basics._op["++"],"λ ",A2($Basics._op["++"],_p0._0,A2($Basics._op["++"]," . ",view(_p0._1))));
+         default: return A2($Basics._op["++"],"(",A2($Basics._op["++"],view(_p0._0),A2($Basics._op["++"]," ",A2($Basics._op["++"],view(_p0._1),")"))));}
+   };
+   var Application = F2(function (a,b) {    return {ctor: "Application",_0: a,_1: b};});
+   var Abstraction = F2(function (a,b) {    return {ctor: "Abstraction",_0: a,_1: b};});
+   var Variable = function (a) {    return {ctor: "Variable",_0: a};};
+   var Empty = {ctor: "Empty"};
+   return _elm.Lambda.values = {_op: _op,Empty: Empty,Variable: Variable,Abstraction: Abstraction,Application: Application,view: view};
+};

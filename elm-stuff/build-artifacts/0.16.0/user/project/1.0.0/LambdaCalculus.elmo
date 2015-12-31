@@ -1,0 +1,19 @@
+Elm.LambdaCalculus = Elm.LambdaCalculus || {};
+Elm.LambdaCalculus.make = function (_elm) {
+   "use strict";
+   _elm.LambdaCalculus = _elm.LambdaCalculus || {};
+   if (_elm.LambdaCalculus.values) return _elm.LambdaCalculus.values;
+   var _U = Elm.Native.Utils.make(_elm),
+   $Basics = Elm.Basics.make(_elm),
+   $Debug = Elm.Debug.make(_elm),
+   $List = Elm.List.make(_elm),
+   $Maybe = Elm.Maybe.make(_elm),
+   $Result = Elm.Result.make(_elm),
+   $Signal = Elm.Signal.make(_elm);
+   var _op = {};
+   var Application = F2(function (a,b) {    return {ctor: "Application",_0: a,_1: b};});
+   var Abstraction = F2(function (a,b) {    return {ctor: "Abstraction",_0: a,_1: b};});
+   var Variable = function (a) {    return {ctor: "Variable",_0: a};};
+   var Empty = {ctor: "Empty"};
+   return _elm.LambdaCalculus.values = {_op: _op,Empty: Empty,Variable: Variable,Abstraction: Abstraction,Application: Application};
+};
