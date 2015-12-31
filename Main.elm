@@ -5,24 +5,26 @@ import Lambda
 
 main = 
   StartApp.Simple.start {
-    model = Lambda.Empty,
+    model = Lambda.Hole,
     view = view, 
     update = update
   }
 
-type Action = Variable | Abstract | Apply
+type Binding = Free | Bound
+type Direction = Left | Right
+type Action = Variable | Abstract Binding | Apply Direction
 
 update : Action -> Lambda.Expression String -> Lambda.Expression String
 update action model =
   case action of
     Variable -> case model of
-      Lambda.Empty -> Lambda.Variable "s"
+      Lambda.Hole -> Lambda.Variable "s"
       _ -> model
-    Abstract -> case model of
+    Abstract _ -> case model of
       Lambda.Variable _ -> Lambda.Abstraction "s" model
       _ -> model
-    Apply -> case model of
-      Lambda.Abstraction _ _ -> Lambda.Application model Lambda.Empty
+    Apply _ -> case model of
+      Lambda.Abstraction _ _ -> Lambda.Application model Lambda.Hole
       _ -> model
 
 view address model =
@@ -32,6 +34,6 @@ view address model =
     Html.text (Lambda.view model),
     Html.h2 [] [Html.text "Actions"],
     Html.button [Html.Events.onClick address Variable] [Html.text "Variable"],
-    Html.button [Html.Events.onClick address Abstract] [Html.text "Abstract"],
-    Html.button [Html.Events.onClick address Apply] [Html.text "Apply"]
+    Html.button [Html.Events.onClick address (Abstract Free)] [Html.text "Abstract"],
+    Html.button [Html.Events.onClick address (Apply Right)] [Html.text "Apply"]
   ]
