@@ -1,6 +1,9 @@
 module Lambda where
 
 import Html
+import Html.Attributes
+import Color
+import Hex
 
 type Expression t
   = Hole
@@ -8,10 +11,29 @@ type Expression t
   | Abstraction t (Expression t)
   | Application (Expression t) (Expression t)
 
-view : Expression String -> String
+coloredBox : Color.Color -> Html.Attribute
+coloredBox c =
+  Html.Attributes.style [
+    ("backgroundColor", Hex.coreColorToCssString c),
+    ("display", "inline-block"),
+    ("padding", ".4em")
+  ]
+
+view : Expression Color.Color -> Html.Html
 view e =
   case e of
-    Hole -> "_"
-    Variable t -> t
-    Abstraction t e -> "λ " ++ t ++ " . " ++ view e
-    Application e1 e2 -> "(" ++ view e1 ++ " " ++ view e2 ++ ")"
+    Hole -> Html.span [coloredBox Color.blue] []
+    Variable t -> Html.span [coloredBox t] []
+    Abstraction t te -> Html.span [] [
+      Html.text "λ",
+      Html.span [coloredBox t] [],
+      Html.text ".",
+      view te
+    ]
+    Application e1 e2 -> Html.span [] [
+      Html.text "(",
+      view e1,
+      Html.text " ",
+      view e2,
+      Html.text ")"
+    ]
